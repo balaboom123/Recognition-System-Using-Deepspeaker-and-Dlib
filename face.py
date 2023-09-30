@@ -42,6 +42,7 @@ def delete_mutiface_picture(dir):
 			resized_gray_face = cv2.resize(gray_face, dim)
 
 			dnnFaceDetector = dlib.cnn_face_detection_model_v1(mmod_human_face_detector)
+			print("it is dnn", dnnFaceDetector)
 			rects = dnnFaceDetector(resized_gray_face, 0)
 			print(f'sucess process{rects}')
 

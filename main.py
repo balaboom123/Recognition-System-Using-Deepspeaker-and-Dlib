@@ -11,7 +11,9 @@ Options:
 
 # importing libraries
 import face_recognition
-import docopt
+# import docopt
+
+import dlib
 from sklearn import svm
 import os
 
@@ -52,9 +54,9 @@ def face_recognize(dir, tests_dir):
 
     if tests_dir[-1] != '/':
         tests_dir += '/'
-    test_dir = os.listdir(tests_dir)
+    tests_img = os.listdir(tests_dir)
     # Load the test image with unknown faces into a numpy array
-    for test_img in test_dir:
+    for test_img in tests_img:
         test_image = face_recognition.load_image_file(test_img)
 
         # Find all the faces in the test image using the default HOG-based model
@@ -69,3 +71,11 @@ def face_recognize(dir, tests_dir):
             name = clf.predict([test_image_enc])
             print(*name)
 
+
+# 获取当前脚本的绝对路径
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 构建 bbb 文件夹的路径
+data_dir = os.path.join(script_dir, "data")
+test_dir = os.path.join(script_dir, "test")
+face_recognize(data_dir, test_dir)
