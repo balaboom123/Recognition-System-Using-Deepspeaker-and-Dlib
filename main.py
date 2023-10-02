@@ -76,6 +76,6 @@ def face_recognize(dir, tests_dir):
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 构建 bbb 文件夹的路径
-data_dir = os.path.join(script_dir, "data")
-test_dir = os.path.join(script_dir, "test")
+data_dir = os.path.join(script_dir, "train_data")
+test_dir = os.path.join(script_dir, "test_data")
 face_recognize(data_dir, test_dir)
