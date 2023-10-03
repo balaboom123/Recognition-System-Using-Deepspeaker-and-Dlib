@@ -2,14 +2,22 @@
 ## introduction
 This project is for classifying the face in a group. It can be used to manage the photo in 
 the family, recognize employees in a company, etc. It will process in this procedure.
-1. collect the person’s facial pictures and sort it in specific file structure. 
+1. collect the person’s facial pictures and sort it in specific file structure.
 2. the model (face_recognition in dlib) will turn every picture into an array with 128 
 numbers. 
 3. using SVM to classify the face
 4. Input an image and clarify who it is
 
+## turn face into 128 dimensions vector
+use face_descript_compute.py to compute dacial description
+```mermaid
+flowchart LR
+A(collect image) -->|cnn_face_detection_model| B(128D vector)
+B --> C(classification)
+```
+
 ## File structure  
-- 根目錄
+- root
   - data/
     - person_1/
       - person_1_face-1.jpg
