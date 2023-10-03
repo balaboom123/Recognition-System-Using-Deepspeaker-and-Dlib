@@ -9,16 +9,15 @@ numbers.
 4. Input an image and clarify who it is
 
 ## turn face into 128 dimensions vector
+use face_descript_compute.py to compute dacial description
 ```mermaid
 flowchart LR
 A(collect image) -->|cnn_face_detection_model| B(128D vector)
-B --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
+B --> C(classification)
 ```
 
 ## File structure  
-- 根目錄
+- root
   - data/
     - person_1/
       - person_1_face-1.jpg
