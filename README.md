@@ -14,7 +14,7 @@ the family, recognize employees in a company, etc. It will process in this proce
 use face_descript_compute.py to compute dacial description
 ```mermaid
 flowchart LR
-A(collect image) -->|cnn_face_detection_model| B(128D vector)
+A(collect image) -->|get_frontal_face_detector| B(128D vector)
 B --> C(classification)
 ```
 
