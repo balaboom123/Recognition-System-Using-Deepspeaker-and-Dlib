@@ -77,10 +77,10 @@ def face_feature(dir, interpolation=1, useless_img="save"):
 				# left, top, right, bottom = boxes[0]
 				# face_aligned = img[top:bottom, left:right]
 
-				# face_descript = recognizer.compute_face_descriptor(face_aligned)
-				# face_descript = np.array(face_descript)
-				# encodings.append(face_descript)
-				# names.append(person)
+				face_descript = recognizer.compute_face_descriptor(face_aligned)
+				face_descript = np.array(face_descript)
+				encodings.append(face_descript)
+				names.append(person)
 
 	return encodings, names
 
