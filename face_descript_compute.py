@@ -2,7 +2,6 @@ import cv2
 import dlib
 import numpy as np
 import os
-from imutils.face_utils import rect_to_bb
 
 def face_feature(dir, interpolation=1, useless_img="save"):
 	"""

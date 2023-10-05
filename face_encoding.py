@@ -57,7 +57,7 @@ def face_recognize(dir, tests_dir):
     tests_img = os.listdir(tests_dir)
     # Load the test image with unknown faces into a numpy array
     for test_img in tests_img:
-        test_image = face_recognition.load_image_file(test_img)
+        test_image = face_recognition.load_image_file(tests_dir + '/' + test_img)
 
         # Find all the faces in the test image using the default HOG-based model
         face_locations = face_recognition.face_locations(test_image)
