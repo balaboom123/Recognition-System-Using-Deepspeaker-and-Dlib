@@ -3,6 +3,9 @@ import dlib
 import numpy as np
 import os
 
+from imutils.face_utils import rect_to_bb
+
+
 def face_feature(dir, interpolation=1, useless_img="save"):
 	"""
 
@@ -22,8 +25,7 @@ def face_feature(dir, interpolation=1, useless_img="save"):
 	recognizer_model = os.path.join(script_dir, "model\\dlib_face_recognition_resnet_model_v1.dat")
 	shape_predict_model = os.path.join(script_dir, "model\\shape_predictor_5_face_landmarks.dat")
 
-	# detector = dlib.cnn_face_detection_model_v1(detector_model)
-	detector = dlib.get_frontal_face_detector()
+	detector = dlib.cnn_face_detection_model_v1(detector_model)
 	recognizer = dlib.face_recognition_model_v1(recognizer_model)
 	shape_predictor = dlib.shape_predictor(shape_predict_model)
 
@@ -53,29 +55,25 @@ def face_feature(dir, interpolation=1, useless_img="save"):
 			resized_gray_face = cv2.resize(gray_face, dim)
 
 			# detect face
-			rects = detector(resized_gray_face, 0)
-			print("it is detector", rects)
+			detection = detector(resized_gray_face, 0)
+			print(person_img)
+			print("it is detector", detection)
 
 			# If training image contains not only one face, delete or skip it
 			# If training image contains only one face, compute face description and save result
-			if len(rects) != 1:
+			if len(detection) != 1:
 				if useless_img == "delete":
-					print(f"Deleting {person}/{person_img} as it has {len(rects)} faces.")
+					print(f"Deleting {person}/{person_img} as it has {len(detection)} faces.")
 					# os.remove(dir + person + "/" + person_img)
 				else:
-					print(f"Retain {person}/{person_img} as it has {len(rects)} faces.")
+					print(f"Retain {person}/{person_img} as it has {len(detection)} faces.")
 
 			else:
-				face_shape = shape_predictor(face, rects[0])
-				print("it is shape", face_shape)
+				# get the shape of the face
+				face_shape = shape_predictor(face, detection[0].rect)
 				face_aligned = dlib.get_face_chip(face, face_shape, size=150, padding=0.25)
 
-				# get face position (x, y, w, h)
-				# boxes = [rect_to_bb(r.rect) for r in rects]
-				# print(boxes)
-				# left, top, right, bottom = boxes[0]
-				# face_aligned = img[top:bottom, left:right]
-
+				# get the facial feature extraction
 				face_descript = recognizer.compute_face_descriptor(face_aligned)
 				face_descript = np.array(face_descript)
 				encodings.append(face_descript)
