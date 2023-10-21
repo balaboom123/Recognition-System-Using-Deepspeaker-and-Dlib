@@ -1,10 +1,22 @@
 # face_voice_recognition
 ## introduction
-This project is for classifying the face in a group. It can be used to manage the photo in 
-the family, recognize employees in a company, etc. It will process in this procedure.
-1. collect the person’s facial pictures and sort it in specific file structure.
-2. the model in dlib will turn every picture in training set into an 128D vector
+This project is for classifying the biometric feature in a group. It can control the permission of entrance, which is more secure than the key.
+For instance, recognize family member to entry home or employees in a company, etc. It will process in this procedure.
 
+### face
+1. collect the person’s facial pictures and sort it in specific file structure.  
+2. detecte the boxes of face  
+3. dlib shape_predictor_68_face_landmarks will get the facial feature  
+4. compute features in training data to an 128D vector  
+5. output to feature fusion  
+  
+### voice
+use deep-speaker cnn model to get the feature of voice
+pass  
+  
+### finger print
+pass  
+  
 ## require
 - python 3.10
 - dlib gpu
@@ -20,7 +32,7 @@ B --> C(feature fusion)
 ```
 
 ### yolov8 detection model
-use face_descript_compute.py to compute facial description
+use yolov8_desript_compute.py to compute facial description
 ```mermaid
 flowchart LR
 A(collect image) -->|yolov8| B(128D vector)
