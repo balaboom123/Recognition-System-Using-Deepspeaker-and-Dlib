@@ -55,9 +55,31 @@ graph LR
     person_2 -.-> HeaderBackground["Header Background.png"]
     person_2 -.-> LargeHeaderBackground["Large Header Background.png"]
     person_2 -.-> Logo["Logo.png"]
+    person_n -.-> Logo["Logo.png"]
+    person_n -.-> Logo["Logo.png"]
+    person_n -.-> Logo["Logo.png"]
 
     classDef default fill:#fff,stroke:#000,stroke-width:1px;
     classDef assets fill:#f9f9f9,stroke:#000,stroke-width:1px;
+```
+
+```
+project
+│   README.md
+│   file001.txt    
+│
+└───folder1
+│   │   file011.txt
+│   │   file012.txt
+│   │
+│   └───subfolder1
+│       │   file111.txt
+│       │   file112.txt
+│       │   ...
+│   
+└───folder2
+    │   file021.txt
+    │   file022.txt
 ```
 ---------------------------
 ## Issue
