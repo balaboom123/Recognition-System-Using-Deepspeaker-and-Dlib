@@ -42,23 +42,23 @@ B --> C(feature fusion)
     - file2.jpg
    
 .
-├── projects/
-│   ├── acme.md
-│   ├── ideas.doc
-│   ├── presentation.pdf
-│   ├── ▶stuff/
-│   ├── assets/
-│   │   ├── back_flip.gif
-│   │   └── B034543543.jpg
-│   ├── web/
-│   │   ├── index.html
-│   │   └── contact.html
-│   ├── journal/
-│   │   ├── my-thoughts-on-candy.md
-│   │   └── how-to-make-one-million-dollars.md
-│   └── vacations/
-│      └── yosemite.jpg
-├── hello.txt
+├── projects/  
+│   ├── acme.md  
+│   ├── ideas.doc  
+│   ├── presentation.pdf  
+│   ├── ▶stuff/  
+│   ├── assets/  
+│   │   ├── back_flip.gif  
+│   │   └── B034543543.jpg  
+│   ├── web  
+│   │   ├── index.html  
+│   │   └── contact.html  
+│   ├── journal/  
+│   │   ├── my-thoughts-on-candy.md  
+│   │   └── how-to-make-one-million-dollars.md  
+│   └── vacations/  
+│      └── yosemite.jpg  
+├── hello.txt  
 └── secrets.txt
 ---------------------------
 ## Issue
