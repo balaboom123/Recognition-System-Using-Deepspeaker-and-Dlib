@@ -1,4 +1,4 @@
-# face_voice_recognition
+# biometric_recognition
 ## introduction
 This project is for classifying the biometric feature in a group. It can control the permission of entrance, which is more secure than the key.
 For instance, recognize family member to entry home or employees in a company, etc. It will process in this procedure.
