@@ -40,26 +40,25 @@ B --> C(feature fusion)
   - test/
     - file1.jpg
     - file2.jpg
-   
-.
-├── projects/  
-│   ├── acme.md  
-│   ├── ideas.doc  
-│   ├── presentation.pdf  
-│   ├── ▶stuff/  
-│   ├── assets/  
-│   │   ├── back_flip.gif  
-│   │   └── B034543543.jpg  
-│   ├── web  
-│   │   ├── index.html  
-│   │   └── contact.html  
-│   ├── journal/  
-│   │   ├── my-thoughts-on-candy.md  
-│   │   └── how-to-make-one-million-dollars.md  
-│   └── vacations/  
-│      └── yosemite.jpg  
-├── hello.txt  
-└── secrets.txt
+
+```mermaid
+graph LR
+    C["root"] --> data["data"]
+    data --> person_1["person_1"]
+    data --> person_2["person_2"]
+    data --> person_n["person_n"]
+    data --> test["test"]
+
+    person_1 -.-> person_1_face-1.jpg["person_1_face-1.jpg"]
+    person_1 -.-> person_1_face-2.jpg["person_1_face-2.jpg"]
+    person_1 -.-> person_1_face-n.jpg["person_1_face-n.jpg"]
+    person_2 -.-> HeaderBackground["Header Background.png"]
+    person_2 -.-> LargeHeaderBackground["Large Header Background.png"]
+    person_2 -.-> Logo["Logo.png"]
+
+    classDef default fill:#fff,stroke:#000,stroke-width:1px;
+    classDef assets fill:#f9f9f9,stroke:#000,stroke-width:1px;
+```
 ---------------------------
 ## Issue
 1. Face Recognition Model Accuracy:
