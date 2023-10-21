@@ -11,36 +11,23 @@ the family, recognize employees in a company, etc. It will process in this proce
 - cuda + cudnn
 
 ## turn face into 128 dimensions vector
-use face_descript_compute.py to compute dacial description
+### dlib cnn face detection model
+use face_descript_compute.py to compute facial description
 ```mermaid
 flowchart LR
 A(collect image) -->|cnn_face_detection| B(128D vector)
 B --> C(feature fusion)
 ```
 
-## File structure  
-- root
-  - data/
-    - person_1/
-      - person_1_face-1.jpg
-      - person_1_face-2.jpg
-      - ...
-      - person_1_face-n.jpg
-    - person_2/
-      - person_2_face-1.jpg
-      - person_2_face-2.jpg
-      - ...
-      - person_2_face-n.jpg
-    - ...
-    - person_n/
-      - person_n_face-1.jpg
-      - person_n_face-2.jpg
-      - ...
-      - person_n_face-n.jpg
-  - test/
-    - file1.jpg
-    - file2.jpg
+### yolov8 detection model
+use face_descript_compute.py to compute facial description
+```mermaid
+flowchart LR
+A(collect image) -->|yolov8| B(128D vector)
+B --> C(feature fusion)
+```
 
+## File structure  
 ```
 project
 │
