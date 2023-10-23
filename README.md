@@ -1,45 +1,74 @@
-# face_voice_recognition
+# biometric_recognition
 ## introduction
-This project is for classifying the face in a group. It can be used to manage the photo in 
-the family, recognize employees in a company, etc. It will process in this procedure.
-1. collect the person’s facial pictures and sort it in specific file structure.
-2. the model in dlib will turn every picture in training set into an 128D vector
+This project is for classifying the biometric feature in a group. It can control the permission of entrance, which is more secure than the key.
+For instance, recognize family member to entry home or employees in a company, etc. It will process in this procedure.
 
+### face
+1. collect the person’s facial pictures and sort it in specific file structure.  
+2. detecte the boxes of face  
+3. dlib shape_predictor_68_face_landmarks will get the facial feature  
+4. compute features in training data to an 128D vector  
+5. output to feature fusion  
+  
+### voice
+use deep-speaker cnn model to get the feature of voice
+pass  
+  
+### finger print
+pass  
+  
 ## require
 - python 3.10
 - dlib gpu
 - cuda + cudnn
 
 ## turn face into 128 dimensions vector
-use face_descript_compute.py to compute dacial description
+### dlib cnn face detection model
+use face_descript_compute.py to compute facial description
 ```mermaid
 flowchart LR
 A(collect image) -->|cnn_face_detection| B(128D vector)
 B --> C(feature fusion)
 ```
 
+### yolov8 detection model
+use yolov8_desript_compute.py to compute facial description
+```mermaid
+flowchart LR
+A(collect image) -->|yolov8| B(128D vector)
+B --> C(feature fusion)
+```
+
 ## File structure  
-- root
-  - data/
-    - person_1/
-      - person_1_face-1.jpg
-      - person_1_face-2.jpg
-      - ...
-      - person_1_face-n.jpg
-    - person_2/
-      - person_2_face-1.jpg
-      - person_2_face-2.jpg
-      - ...
-      - person_2_face-n.jpg
-    - ...
-    - person_n/
-      - person_n_face-1.jpg
-      - person_n_face-2.jpg
-      - ...
-      - person_n_face-n.jpg
-  - test/
-    - file1.jpg
-    - file2.jpg
+```
+project
+│
+└───data
+│   │
+│   └───person_1
+│       │   person_1_face-1.jpg
+│       │   person_1_face-2.jpg
+│       │   ...
+│       │   person_1_face-n.jpg
+│   │  
+│   └───person_2
+│       │   person_2_face-1.jpg
+│       │   person_2_face-2.jpg
+│       │   ...
+│       │   person_2_face-n.jpg
+│   ...
+│   ...
+│   │
+│   └───person_n
+│       │   person_n_face-1.jpg
+│       │   person_n_face-2.jpg
+│       │   ...
+│       │   person_n_face-n.jpg
+│   
+└───test
+    │   file1.jpg
+    │   file2.jpg
+```
 ---------------------------
 ## Issue
 1. Face Recognition Model Accuracy:
