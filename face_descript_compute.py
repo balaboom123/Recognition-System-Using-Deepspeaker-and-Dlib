@@ -23,7 +23,7 @@ def face_feature(dir, interpolation=1, useless_img="save"):
 	# load model
 	detector_model = os.path.join(script_dir, "model\\mmod_human_face_detector.dat")
 	recognizer_model = os.path.join(script_dir, "model\\dlib_face_recognition_resnet_model_v1.dat")
-	shape_predict_model = os.path.join(script_dir, "model\\shape_predictor_5_face_landmarks.dat")
+	shape_predict_model = os.path.join(script_dir, "model\\shape_predictor_68_face_landmarks.dat")
 
 	detector = dlib.cnn_face_detection_model_v1(detector_model)
 	recognizer = dlib.face_recognition_model_v1(recognizer_model)
@@ -56,28 +56,16 @@ def face_feature(dir, interpolation=1, useless_img="save"):
 
 			# detect face
 			detection = detector(resized_gray_face, 0)
-			print(person_img)
-			print("it is detector", detection)
 
-			# If training image contains not only one face, delete or skip it
-			# If training image contains only one face, compute face description and save result
-			if len(detection) != 1:
-				if useless_img == "delete":
-					print(f"Deleting {person}/{person_img} as it has {len(detection)} faces.")
-					# os.remove(dir + person + "/" + person_img)
-				else:
-					print(f"Retain {person}/{person_img} as it has {len(detection)} faces.")
+			# get the shape of the face
+			face_shape = shape_predictor(face, detection[0].rect)
+			face_aligned = dlib.get_face_chip(face, face_shape, size=150, padding=0.25)
 
-			else:
-				# get the shape of the face
-				face_shape = shape_predictor(face, detection[0].rect)
-				face_aligned = dlib.get_face_chip(face, face_shape, size=150, padding=0.25)
-
-				# get the facial feature extraction
-				face_descript = recognizer.compute_face_descriptor(face_aligned)
-				face_descript = np.array(face_descript)
-				encodings.append(face_descript)
-				names.append(person)
+			# get the facial feature extraction
+			face_descript = recognizer.compute_face_descriptor(face_aligned)
+			face_descript = np.array(face_descript)
+			encodings.append(face_descript)
+			names.append(person)
 
 	return encodings, names
 
