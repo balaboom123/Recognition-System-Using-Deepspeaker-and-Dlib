@@ -6,6 +6,8 @@ from ultralytics import YOLO
 import dlib
 import torch
 from pathlib import Path
+import pprint
+
 def facial_feature_extract(dir):
 	"""
 	return:
@@ -68,6 +70,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(script_dir, "train_data")
 
 vector, person = facial_feature_extract(data_dir)
-print("it is vector:", vector)
-print("it is person:", person)
+pp = pprint.PrettyPrinter(indent=1, compact=True, depth=1)
+pp.pprint(vector)
+pp.pprint(person)
 
