@@ -50,6 +50,7 @@ def facial_feature_extract(dir):
 			print(person_img)
 
 			left, top, right, bottom = detection[0].boxes.xywh[0].tolist()
+			print(int(left), int(top), int(right), int(bottom))
 
 			dlibRect = dlib.rectangle(int(left), int(top), int(right), int(bottom))
 
@@ -67,7 +68,7 @@ def facial_feature_extract(dir):
 
 # train data dir
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_dir = os.path.join(script_dir, "train_data")
+data_dir = os.path.join(script_dir, "data/train_data/image")
 
 vector, person = facial_feature_extract(data_dir)
 pp = pprint.PrettyPrinter(indent=1, compact=True, depth=1)
