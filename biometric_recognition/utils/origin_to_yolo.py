@@ -8,8 +8,8 @@ from imutils.face_utils import rect_to_bb
 import random
 import re
 
-from utils.root_path import root
 import utils.coordinate
+
 
 
 def find_cls(my_dict, file_name):
@@ -39,9 +39,8 @@ class VideoToYoloFormat:
         print("video_path:", self.video_path)
         print("img_output:", self.img_output)
 
-
         # init detector
-        detector_model = f"{root}/model/mmod_human_face_detector.dat"
+        detector_model = f"./model/mmod_human_face_detector.dat"
         self.detector = dlib.cnn_face_detection_model_v1(detector_model)
 
         # check output directory
@@ -91,7 +90,7 @@ else return False
             rect = detection[0].rect
             return True, rect
 
-    def video_to_face_image(self, time_interval=1, val_period=6):
+    def video_to_face_image(self, time_interval=2, val_period=6):
         """
         save the face image from video
 

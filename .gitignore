@@ -1,4 +1,4 @@
 console.suo
 biometric_recognition/data/
 biometric_recognition/runs/
-datasets/*
+data/*
