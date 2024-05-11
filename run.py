@@ -1,3 +1,5 @@
+import time
+
 import cv2
 import numpy as np
 import os
@@ -6,12 +8,18 @@ import json
 import pickle
 import pyaudio
 import soundfile as sf
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+from rich.console import Console
+from rich.panel import Panel
 
 from biometric_recognition.face_feature_extract import landmark
 from biometric_recognition.face_feature_extract import face_detect_resize
-from biometric_recognition.run.run_init import init_model, init_recorder, init_features, init_question
+from biometric_recognition.run.run_init import init_model, init_recorder, init_features
+from biometric_recognition.run.captcha import random_question, calculate_similarity
 from biometric_recognition.run.record import record_images, record_audio
-from biomeetric_recognition.speech_recog import recognize_speech_from_audio
+from biometric_recognition.run.preprocessing import preprocess_audio
+from biometric_recognition.speech_recog import recognize_speech_from_audio
 
 from deep_speaker.audio import read_mfcc
 from deep_speaker.batcher import sample_from_mfcc
@@ -36,62 +44,98 @@ recognizer, shape_predictor_68, detector, deep_speaker = init_model(
 person_root = f"{script_dir}/data/person_data"
 # person_root = f"{script_dir}/data/temp"
 landmark_x, landmark_y = init_features(person_root="data/person_data")
-print("name include", landmark_y)
 
 # Initialize the camera and audio
 audio, cap = init_recorder()
+console = Console()
 
 count = 0
 while True:
     # choose command
-    command = input("Enter command: 1.login 2.exit")
+    command = input("Enter command: 1.login 2.exit\n")
 
     if command == "exit":
         break
     elif command == "login":
         pass
+    else:
+        print("Invalid command")
+        continue
 
     # Record the images
     file_names = record_images(cap, num_picture=1)
 
     face_cls = None
-    for file_name in file_names:
-        rect, img, resize_img, face_count = face_detect_resize(file_name, detector)
+    file_name = file_names[0]
+    
+    rect, img, resize_img, face_count = face_detect_resize(file_name, detector)
 
-        if face_count != 1:
-            continue
+    if face_count != 1:
+        panel = Panel("Face Not Detected. Please Try Again!", title="Access Denied")
+        console.print(panel)
+        continue
 
-        landmark_feature_68 = landmark(
-            img, rect, recognizer, shape_predictor_68, save_img=False)
+    landmark_feature_68 = landmark(
+        img, rect, recognizer, shape_predictor_68, save_img=True)
 
-        euclidean_distance = [
-            np.linalg.norm(
-                landmark_feature_68 -
-                avg_vector) for avg_vector in landmark_x]
-        min_index = np.argmin(euclidean_distance)
+    euclidean_distance = [
+        np.linalg.norm(
+            landmark_feature_68 -
+            avg_vector) for avg_vector in landmark_x]
+    min_index = np.argmin(euclidean_distance)
 
-        face_cls = landmark_y[min_index]
+    face_cls = landmark_y[min_index]
 
-    print("face recognition: ", face_cls)
+    # Show the image
+    img = mpimg.imread('face_shape_output.jpg')
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
+
+    if face_cls is None:
+        panel = Panel("Face Not Recognized", title="Access Denied")
+        console.print(panel)
+        continue
+    else:
+        print("Face Recognized: ", face_cls)
+        print("- - - - - - - - - - - - - - - - - - -")
 
     speakers_dir = f"{script_dir}/data/person_data/{face_cls}"
-    question = init_question(speakers_dir)
-    print("question: ", question)
+    question = random_question(speakers_dir)
+    print("Speak The Sentence below After Showing Recording")
+    print("The Sentence: ", question)
+    print("- - - - - - - - - - - - - - - - - - -")
 
+    time.sleep(2)
     # Record the audio
-    input_audio_file = record_audio(audio, duration=5)
-    recognize_speech_from_audio(input_audio_file)
-    print("answer: ", input_audio_file)
-    
-    # Process the recorded audio
-    input_mfcc = sample_from_mfcc(read_mfcc(input_audio_file, SAMPLE_RATE), NUM_FRAMES)
-    predicted_embedding = deep_speaker.m.predict(np.expand_dims(input_mfcc, axis=0))
+    input_audio_file = record_audio(audio, duration=7)
+    input_audio_text = recognize_speech_from_audio(input_audio_file)
+    print("Your Answer: ", input_audio_text)
 
-    # Initialize a flag for match
-    match_found = False
+    if input_audio_text is None:
+        panel = Panel("Voice Not Recognized", title="Access Denied")
+        console.print(panel)
+        continue
+    else:
+        match = calculate_similarity(question, input_audio_text)
+
+    if match > 0.7:
+        print("Match")
+        print("- - - - - - - - - - - - - - - - - - -")
+    else:
+        panel = Panel("Not Match", title="Access Denied")
+        console.print(panel)
+        continue
+
+    # Process the recorded audio
+    preprocessed_audio = preprocess_audio(input_audio_file)
+    predicted_embedding = deep_speaker.m.predict(np.expand_dims(preprocessed_audio, axis=0))
+
+    # Initialize variables for highest similarity
+    best_similarity = 0.0
+    best_speaker_id = None
 
     # Loop through each audio file in the directory
-
     for speaker_file in os.listdir(speakers_dir):
         # Skip non-WAV files
         if not speaker_file.endswith(".wav"):
@@ -101,27 +145,31 @@ while True:
         speaker_path = os.path.join(speakers_dir, speaker_file)
 
         # Extract speaker ID from the filename
-        speaker_id = os.path.splitext(speaker_file)[0]
+        # speaker_id = os.path.splitext(speaker_file)[0]
 
         # Get the embedding for the current speaker audio
-        speaker_embedding = deep_speaker.m.predict(
-            np.expand_dims(sample_from_mfcc(read_mfcc(speaker_path, SAMPLE_RATE), NUM_FRAMES), axis=0))
+        speaker_audio = preprocess_audio(speaker_path)
+        speaker_embedding = deep_speaker.m.predict(np.expand_dims(speaker_audio, axis=0))
 
         # Calculate cosine similarity between the input and current speaker
         similarity = batch_cosine_similarity(predicted_embedding, speaker_embedding)
 
-        # Set a threshold for similarity
-        similarity_threshold = 0.4  # Adjust as needed
-
         # Determine if it's a match or not
-        if similarity > similarity_threshold:
-            print(f'MATCH: Input audio matches Speaker {speaker_id} - Similarity: {similarity}')
-            match_found = True
-            break
+        if similarity > best_similarity:
+            best_similarity = similarity
+            # best_speaker_id = speaker_id
 
-    # If no match is found, print "Access Denied"
-    if not match_found:
-        print("Access Denied")
+    # Set a threshold for similarity
+    similarity_threshold = 0.995  # Adjust as needed
+
+    # Determine if it's a match or not
+    if best_similarity > similarity_threshold:
+        panel = Panel(f'Speaker, {face_cls}, match. Similarity: {best_similarity}', title="Access Granted")
+        console.print(panel)
+
+    else:
+        panel = Panel("Speaker not match", title="Access Denied")
+        console.print(panel)
 
     # Exit loop if 'q' is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -131,5 +179,5 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
-# Terminate the PortAudio interface
-p.terminate()
+# Terminate the PyAudio interface
+audio.terminate()

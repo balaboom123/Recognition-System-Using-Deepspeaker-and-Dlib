@@ -50,8 +50,3 @@ def merge_close_vectors(vectors, threshold):
 	return np.array(merged_vectors)
 
 
-# Example usage
-# vectors = np.array([[1, 2, 3], [2, 3, 4], [10, 11, 12], [20, 21, 22], [100, 110, 120]])
-# threshold = 5
-# merged_vectors = merge_close_vectors(vectors, threshold)
-# print("Merged vectors:\n", merged_vectors)

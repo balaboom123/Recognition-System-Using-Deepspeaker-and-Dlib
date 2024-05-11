@@ -6,7 +6,7 @@ from deep_speaker.conv_models import DeepSpeakerModel
 import cv2
 import pyaudio
 import soundfile as sf
-import random
+
 
 def init_model(rec_path, sp_path, ds_path):
 	# dlib
@@ -62,9 +62,5 @@ def init_features(person_root):
 	return x, y
 
 
-def init_question(dir):
-	speech_list = [os.path.splitext(f) for f in os.listdir(dir) if f.endswith(".wav")]
-	speech_list = [name for name, _ in speech_list]
-	random_element = random.choice(speech_list)
 
-	return random_element
+

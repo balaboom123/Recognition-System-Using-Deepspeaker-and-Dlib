@@ -5,6 +5,8 @@ import pyaudio
 import soundfile as sf  # For saving audio to FLAC file
 from scipy import signal
 import noisereduce as nr
+from tqdm import tqdm
+import time
 
 
 # Function to record audio from microphone
@@ -17,7 +19,7 @@ def record_audio(p, duration=1):
 
 	p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-	print('Recording...')
+	print('Audio Recording...')
 
 	stream = p.open(
 		format=sample_format,
@@ -30,7 +32,7 @@ def record_audio(p, duration=1):
 	frames = []  # Initialize array to store frames
 
 	# Store data in chunks for specified seconds
-	for i in range(0, int(fs / chunk * seconds)):
+	for i in tqdm(range(0, int(fs / chunk * seconds)), desc="Recording"):
 		data = stream.read(chunk)
 		frames.append(data)
 
@@ -62,7 +64,7 @@ def record_audio(p, duration=1):
 	return filename
 
 
-def record_images(cap, num_picture=4):
+def record_images(cap, num_picture=1):
 	# Directory to save the images
 	output_dir = 'recorded_images'
 	os.makedirs(output_dir, exist_ok=True)
@@ -70,7 +72,7 @@ def record_images(cap, num_picture=4):
 	# Initialize the images path list
 	filename = []
 
-	print('Recording...')
+	print('Image Capturing...')
 
 	count = 0
 	while True:
@@ -95,6 +97,6 @@ def record_images(cap, num_picture=4):
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
 
-	print('Finished recording.')
+	print('Finished Capturing.')
 
 	return filename

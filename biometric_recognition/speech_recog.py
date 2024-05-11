@@ -12,10 +12,12 @@ def recognize_speech_from_audio(audio_file):
         # Recognize the speech in the audio file
         try:
             text = recognizer.recognize_google(audio_data)
-            print(f"Recognized Text: {text}")
+            return text
         except sr.UnknownValueError:
             print("could not understand the audio")
+            return None
         except sr.RequestError as e:
             print(f"Could not request results Speech Recognition service; {e}")
+            return None
 
 

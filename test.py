@@ -32,26 +32,25 @@ def extract_and_boost_audio(video_path, output_audio, boost_factor):
     # 保存提升音量後的音頻為WAV格式
     boosted_audio.write_audiofile(output_audio, codec='pcm_s16le')
 
-import cv2
+from rich.console import Console
+from rich.panel import Panel
 
-print('Recording...')
-cap = cv2.VideoCapture(0)
-count = 0
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+# 创建控制台对象
+console = Console()
 
-    # Display the frame
-    cv2.imshow('Frame', frame)  # Provide the window name 'Frame'
+text = ("Hello, this is some text!"
+        "This is a new line of text!")
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+# 创建面板对象，设置文本内容和标题
+panel = Panel(text, title="My Panel")
 
-# Release the capture and close all OpenCV windows
-cap.release()
-cv2.destroyAllWindows()
+# 打印面板
+console.print(panel)
 
+text = ("Hello, this is some text!"
+        "This is a new line of text!")
+panel = Panel(text, title="My Panel")
+console.print(panel)
 """
 scripts_dir = os.path.dirname(os.path.abspath(__file__))
 input_root = os.path.join(scripts_dir, "data/test")

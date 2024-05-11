@@ -118,7 +118,7 @@ def landmark(
 		img_cv = cv2.cvtColor(np.array(face), cv2.COLOR_RGB2BGR)
 		for part in face_shape.parts():
 			# Draw a circle at each landmark
-			cv2.circle(img_cv, (part.x, part.y), 10, (0, 255, 0), -1)
+			cv2.circle(img_cv, (part.x, part.y), 3, (0, 255, 0), -1)
 
 		cv2.imwrite("face_shape_output.jpg", img_cv)
 		cv2.imwrite("face_aligned_output.jpg", face_aligned)
