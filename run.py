@@ -3,11 +3,6 @@ import time
 import cv2
 import numpy as np
 import os
-import dlib
-import json
-import pickle
-import pyaudio
-import soundfile as sf
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from rich.console import Console
@@ -42,7 +37,6 @@ recognizer, shape_predictor_68, detector, deep_speaker = init_model(
 
 # Load the features
 person_root = f"{script_dir}/data/person_data"
-# person_root = f"{script_dir}/data/temp"
 landmark_x, landmark_y = init_features(person_root="data/person_data")
 
 # Initialize the camera and audio
@@ -147,7 +141,8 @@ while True:
         # Extract speaker ID from the filename
         # speaker_id = os.path.splitext(speaker_file)[0]
 
-        # Get the embedding for the current speaker audio
+
+        # Process the recorded audio
         speaker_audio = preprocess_audio(speaker_path)
         speaker_embedding = deep_speaker.m.predict(np.expand_dims(speaker_audio, axis=0))
 
@@ -160,7 +155,7 @@ while True:
             # best_speaker_id = speaker_id
 
     # Set a threshold for similarity
-    similarity_threshold = 0.995  # Adjust as needed
+    similarity_threshold = 0.7  # Adjust as needed
 
     # Determine if it's a match or not
     if best_similarity > similarity_threshold:
@@ -168,7 +163,7 @@ while True:
         console.print(panel)
 
     else:
-        panel = Panel("Speaker not match", title="Access Denied")
+        panel = Panel(f'Speaker, {face_cls}, not match. Similarity: {best_similarity}', title="Access Denied")
         console.print(panel)
 
     # Exit loop if 'q' is pressed

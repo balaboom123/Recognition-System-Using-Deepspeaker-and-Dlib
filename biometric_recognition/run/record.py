@@ -46,10 +46,6 @@ def record_audio(p, duration=1):
 	audio_data = b''.join(frames)
 	audio_array = np.frombuffer(audio_data, dtype=np.int16)
 
-	audio_array = nr.reduce_noise(
-		y=audio_array,
-		sr=fs)
-
 	# Save the recorded data as a FLAC file with a unique filename
 	index = 0
 	while True:
